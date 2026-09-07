@@ -1,13 +1,17 @@
 <?php
 
-$id = $_GET['id'];
+$id = (int) ($_GET['id'] ?? 0);
 if(empty($id)) {
     header("location: masyarakat.php?url=lihat-pengaduan");
+    exit;
 }
 
 include 'koneksi.php';
-$query = mysqli_query($koneksi, "SELECT * FROM pengaduan, tanggapan WHERE tanggapan.id_pengaduan='$id' AND tanggapan.id_pengaduan=pengaduan.id_pengaduan");
-$data = mysqli_fetch_array($query);
+$query = mysqli_query($koneksi, "SELECT p.tgl_pengaduan, p.isi_laporan, p.foto, t.tgl_tanggapan, t.tanggapan
+    FROM pengaduan AS p
+    INNER JOIN tanggapan AS t ON t.id_pengaduan = p.id_pengaduan
+    WHERE p.id_pengaduan = $id
+    ORDER BY t.tgl_tanggapan DESC");
 
 ?>
 
@@ -22,30 +26,35 @@ $data = mysqli_fetch_array($query);
 </div>
 <div class="card-body">
             <?php
-            if(mysqli_num_rows($query)==0){
-                echo"<div class='alert-danger'>Maaf tanggapan anda belum ditanggapi.</div>";
+            if(mysqli_num_rows($query) == 0){
+                echo "<div class='alert alert-danger'>Maaf tanggapan anda belum ditanggapi.</div>";
             }else{
-            $data = mysqli_fetch_array($query); ?>
+            while($data = mysqli_fetch_assoc($query)){ ?>
         
 
-    <form method="POST" action="proses-pengaduan.php" enctype="multipart/form-data">
-        
+    <div class="border-bottom mb-4 pb-3">
         <div class="form-group">
             <label style="font-size: 14px;">Tgl pengaduan</label>
-            <input type="date" name="Tgl_pengaduan" class="form-control" readonly value="<?= $data['tgl_pengaduan'] ?>">
+            <input type="date" class="form-control" readonly value="<?= htmlspecialchars($data['tgl_pengaduan']) ?>">
         </div>
 
     <div class="form-group">
         <label style="font-size: 14px;">isi laporan</label>
-        <textarea name="isi_laporan" class="form-control" required><?= $data['isi_laporan'] ?></textarea>
+        <textarea class="form-control" readonly><?= htmlspecialchars($data['isi_laporan']) ?></textarea>
     </div>
 
     <div class="form-group">
         <label style="font-size: 14px;">foto</label>
-        <img class="img-thumbnail" src="foto/<?= $data['foto'] ?>" width="300">
+        <img class="img-thumbnail" src="foto/<?= htmlspecialchars($data['foto']) ?>" width="300">
     </div>
-    
-    </form>
+
+    <div class="form-group mb-0">
+        <label style="font-size: 14px;">Tanggapan petugas</label>
+        <input type="date" class="form-control mb-2" readonly value="<?= htmlspecialchars($data['tgl_tanggapan']) ?>">
+        <textarea class="form-control" readonly><?= htmlspecialchars($data['tanggapan']) ?></textarea>
+    </div>
+    </div>
+    <?php } ?>
     <?php } ?>
 </div>
 </div>

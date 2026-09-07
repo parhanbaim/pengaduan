@@ -2,6 +2,7 @@
 session_start();
 if(empty($_SESSION['nik'])){
     echo "<script>alert('Anda harus login terlebih dahulu!');window.location.assign='index.php';</script>";
+  exit;
 }
 ?>
 <!DOCTYPE html>

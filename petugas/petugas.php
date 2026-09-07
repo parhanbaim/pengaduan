@@ -1,7 +1,8 @@
 <?php
 session_start();
-if($_SESSION['level'] != "petugas") {
-    echo "<script>alert('Maaf anda bukan petugas!');window.location.assign='../index2.php';</script>";
+if(($_SESSION['level'] ?? '') != "petugas") {
+  echo "<script>alert('Maaf anda bukan petugas!');window.location.assign('../index2.php');</script>";
+  exit;
 }
 ?>
 <!DOCTYPE html>

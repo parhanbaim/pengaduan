@@ -3,6 +3,10 @@
     $page = $_GET['url'];
 
 switch ($page) {
+    case 'tanggapi_laporan':
+        include 'tanggapi.php';
+        break;
+
     case 'tulis-pengaduan':
         include 'tulis-pengaduan.php';
         break;

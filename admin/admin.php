@@ -1,66 +1,12 @@
 <?php
 session_start();
-if($_SESSION['level'] != "admin") {
+if(($_SESSION['level'] ?? '') != "admin") {
     echo "<script>alert('Maaf anda bukan admin!');window.location.assign='../index2.php';</script>";
-}
-
-
-include '../koneksi.php';
-if(isset($_GET['url'])) {
-    $page = $_GET['url'];
-switch ($page) {
-    case 'dashboard':
-        include 'dashboard.php';
-        break;
-    
-    case 'verifikasi_laporan':
-        include 'verifikasi_laporan.php';
-        break;
-}
+  exit;
 }
 ?>
 
 
-
-<div class="container-fluid">
-  <h1 class="h3 mb-4 text-gray-800">Verifikasi Laporan</h1>
-
-<h2>Data Pengaduan</h2>
-
-<table border="1" cellpadding="10">
-    <tr>
-        <th>ID</th>
-        <th>Isi Laporan</th>
-        <th>Status</th>
-        <th>Aksi</th>
-    </tr>
-
-<?php 
-
-
-$data = mysqli_query($koneksi, "SELECT * FROM pengaduan");
-
-while($d = mysqli_fetch_array($data)){
-?>
-
-<tr>
-    <td><?= $d['id_pengaduan']; ?></td>
-    <td><?= $d['isi_laporan']; ?></td>
-    <td><?= $d['status']; ?></td>
-
-    <td>
-        <a href="verifikasi.php?id_pengaduan=<?= $d['id_pengaduan']; ?>">
-            Verifikasi
-        </a>
-    </td>
-</tr>
-
-<?php } ?>
-
-</table>
-</div>
-</body>
-</html>
 
 <html lang="en">
 

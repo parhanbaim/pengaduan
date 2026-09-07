@@ -23,8 +23,9 @@ switch ($page) {
         include 'lihat-tanggapan.php';
         break;
 
+    case 'verifikasi_laporan':
     case 'verifikasi':
-        include 'admin/verifikasi.php';
+        include 'verifikasi.php';
         break;
 
         default:
